@@ -13,6 +13,8 @@ namespace OPI.HelpDessk.Domain.Entities
         public int MaxTicket { get; set; } = 3;
 
         public IEnumerable<Ticket> AssignedTickets { get; set; } = new List<Ticket>();
+        public IEnumerable<Ticket> CreateTickets { get; set; } = new List<Ticket>();
+        public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
 
 
     }

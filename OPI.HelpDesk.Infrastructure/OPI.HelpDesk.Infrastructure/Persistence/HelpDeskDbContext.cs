@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OPI.HelpDesk.Application.Interfaces.Auditoires;
+using OPI.HelpDesk.Infrastructure.Persistence.Configurations;
 using OPI.HelpDessk.Domain.Entities;
 
 namespace OPI.HelpDesk.Infrastructure.Persistence
@@ -34,6 +35,21 @@ namespace OPI.HelpDesk.Infrastructure.Persistence
                 }
             }
             return base.SaveChangesAsync(cancellationToken);
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            ModelConfig(modelBuilder);
+        }
+
+        private void ModelConfig(ModelBuilder model)
+        {
+            new CommentConfiguration(model.Entity<Comment>());
+            new RefreshTokenConfiguration(model.Entity<RefreshToken>());
+            new SettingSLAConfiguration(model.Entity<SettingSLA>());
+            new TicketConfiguration(model.Entity<Ticket>());
+            new TicketHistoryLogConfiguration(model.Entity<TicketHistoryLog>());
+            new UserConfiguration(model.Entity<User>());
         }
     }
 }

@@ -4,22 +4,24 @@ using OPI.HelpDessk.Domain.Entities;
 
 namespace OPI.HelpDesk.Infrastructure.Persistence.Configurations
 {
-    public class CommentConfiguration
+    public class TicketHistoryLogConfiguration
     {
-        public CommentConfiguration(EntityTypeBuilder<Comment> builder)
+        public TicketHistoryLogConfiguration(EntityTypeBuilder<TicketHistoryLog> builder)
         {
-            builder.ToTable("Comment");
-            builder.HasKey(c => c.Id);
-            builder.HasOne(c => c.Ticket)
-                .WithMany(t => t.Comments)
-                .HasForeignKey(c => c.TicketId)
+            builder.ToTable("TicketHistortyLog");
+            builder.HasKey(th => th.Id);
+            builder.HasOne(th => th.Ticket)
+                .WithMany(t => t.History)
+                .HasForeignKey(th => th.TicketId)
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.Property(c => c.Text)
+            builder.Property(th => th.FromStatus)
+                .HasConversion<int>()
+                .IsRequired();
+            builder.Property(th => th.ToStatus)
+                .HasConversion<int>()
+                .IsRequired();
+            builder.Property(th => th.Note)
                 .HasMaxLength(500);
-            builder.HasOne(c => c.User)
-                    .WithMany(u => u.Comments)
-                    .HasForeignKey(c => c.CreatedBy)
-                    .OnDelete(DeleteBehavior.Restrict);
             builder.Property(a => a.CreatedAt)
                     .IsRequired()
                     .HasColumnType("timestamp with time zone")
@@ -34,3 +36,4 @@ namespace OPI.HelpDesk.Infrastructure.Persistence.Configurations
         }
     }
 }
+
