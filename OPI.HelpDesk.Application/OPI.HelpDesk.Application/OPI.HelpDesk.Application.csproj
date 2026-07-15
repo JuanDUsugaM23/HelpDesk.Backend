@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\OPI.HelpDesk.Domain\OPI.HelpDessk.Domain\OPI.HelpDessk.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

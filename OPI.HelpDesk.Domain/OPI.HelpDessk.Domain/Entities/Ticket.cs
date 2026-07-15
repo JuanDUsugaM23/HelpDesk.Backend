@@ -9,7 +9,6 @@ namespace OPI.HelpDessk.Domain.Entities
         public TicketCategoriesEnum Category { get; set; }
         public TicketPriorityEnum Priority { get; set; }
         public TicketStatusEnum Status { get; set; }
-        public Guid ClientId { get; set; }
         public virtual User Client { get; set; }
         public Guid AssignedTechnicalId { get; set; }
         public virtual User AssignedTechnical { get; set; }

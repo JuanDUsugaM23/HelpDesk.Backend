@@ -4,22 +4,22 @@ using OPI.HelpDessk.Domain.Entities;
 
 namespace OPI.HelpDesk.Infrastructure.Persistence.Configurations
 {
-    public class CommentConfiguration
+    public class SettingSLAConfiguration
     {
-        public CommentConfiguration(EntityTypeBuilder<Comment> builder)
+        public SettingSLAConfiguration(EntityTypeBuilder<SettingSLA> builder)
         {
-            builder.ToTable("Comment");
-            builder.HasKey(c => c.Id);
-            builder.HasOne(c => c.Ticket)
-                .WithMany(t => t.Comments)
-                .HasForeignKey(c => c.TicketId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.Property(c => c.Text)
-                .HasMaxLength(500);
-            builder.HasOne(c => c.User)
-                    .WithMany(u => u.Comments)
-                    .HasForeignKey(c => c.CreatedBy)
-                    .OnDelete(DeleteBehavior.Restrict);
+            builder.ToTable("SettingsSLA");
+            builder.HasKey(s => s.Id);
+            builder.Property(t => t.Priority)
+                .HasConversion<int>()
+                .IsRequired();
+            builder.Property(t => t.Categority)
+                .HasConversion<int>()
+                .IsRequired();
+            builder.Property(t => t.LimitTime)
+                .HasPrecision(18, 2) 
+                .IsRequired()
+                .HasDefaultValue(0.0);
             builder.Property(a => a.CreatedAt)
                     .IsRequired()
                     .HasColumnType("timestamp with time zone")
