@@ -6,8 +6,9 @@ using System.Collections;
 
 namespace OPI.HelpDesk.Infrastructure.Persistence.UnitOfWorks
 {
-    public class UnitOfWork(HelpDeskDbContext context, Hashtable repositories) : IUnitOfWork
+    public class UnitOfWork(HelpDeskDbContext context) : IUnitOfWork
     {
+        private readonly Dictionary<string, object> repositories = new();
         public void Dispose()
         {
             context.Dispose();
