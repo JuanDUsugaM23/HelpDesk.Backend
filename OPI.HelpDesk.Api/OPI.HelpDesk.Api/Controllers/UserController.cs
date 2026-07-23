@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OPI.HelpDesk.Application.Dtos.Shares;
 using OPI.HelpDesk.Application.Dtos.Users;
 using OPI.HelpDesk.Application.Interfaces.Users;
+using OPI.HelpDessk.Domain.Entities.Enums;
 
 namespace OPI.HelpDesk.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController(IUserService userService) : ControllerBase
     {
         [HttpPost("Add")]
+        [Authorize(Roles = nameof(RolesEnum.Supervisor))]
         public async Task<ResponseWrapper<UserResponseDto>> Add([FromBody] UserAddRequestDto request, CancellationToken ct)
         {
             try
@@ -35,6 +39,7 @@ namespace OPI.HelpDesk.Api.Controllers
         }
 
         [HttpGet("GetAll")]
+        [Authorize(Roles = nameof(RolesEnum.Supervisor))]
         public async Task<ResponseWrapper<GetAllResponseDto<UserResponseDto>>> GetAll([FromQuery] GetAllUserQueryDto query, CancellationToken ct)
         {
             try
@@ -58,6 +63,7 @@ namespace OPI.HelpDesk.Api.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize(Roles = nameof(RolesEnum.Supervisor))]
         public async Task<ResponseWrapper<UserResponseDto>> GetById(Guid id, CancellationToken ct)
         {
             try
@@ -81,6 +87,7 @@ namespace OPI.HelpDesk.Api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = nameof(RolesEnum.Supervisor))]
         public async Task<ResponseWrapper<UserResponseDto>> Update([FromBody] UserEditRequestDto request, CancellationToken ct)
         {
             try

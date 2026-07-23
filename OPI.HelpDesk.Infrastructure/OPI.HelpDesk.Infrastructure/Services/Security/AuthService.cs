@@ -21,6 +21,10 @@ namespace OPI.HelpDesk.Infrastructure.Services.Security
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
+            if (!string.IsNullOrEmpty(user.Role.ToString()))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
+            }
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

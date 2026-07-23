@@ -1,15 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OPI.HelpDesk.Application.Dtos.SettingSLAs;
 using OPI.HelpDesk.Application.Dtos.Shares;
 using OPI.HelpDesk.Application.Interfaces.SettingSLAs;
+using OPI.HelpDessk.Domain.Entities.Enums;
 
 namespace OPI.HelpDesk.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    
     public class SettingSLAController(ISettingSLA settingSLAService) : ControllerBase
     {
         [HttpPost("Add")]
+        [Authorize(Roles = nameof(RolesEnum.Supervisor))]
         public async Task<ResponseWrapper<SettingSLAResponseDto>> Add([FromBody] SettingSLAAddRequestDto request, CancellationToken ct)
         {
             try
@@ -34,6 +39,7 @@ namespace OPI.HelpDesk.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = nameof(RolesEnum.Supervisor))]
         public async Task<ResponseWrapper<GetAllResponseDto<SettingSLAResponseDto>>> GetAll([FromQuery] GetSettingSLAsQueryDto query, CancellationToken ct)
         {
             try
@@ -58,6 +64,7 @@ namespace OPI.HelpDesk.Api.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize(Roles = nameof(RolesEnum.Supervisor))]
         public async Task<ResponseWrapper<SettingSLAResponseDto>> GetById(Guid id, CancellationToken ct)
         {
             try
@@ -82,6 +89,7 @@ namespace OPI.HelpDesk.Api.Controllers
         }
 
         [HttpPut("Update")]
+        [Authorize(Roles = nameof(RolesEnum.Supervisor))]
         public async Task<ResponseWrapper<SettingSLAResponseDto>> Update([FromBody] SettingSLAEditRequestDto request, CancellationToken ct)
         {
             try

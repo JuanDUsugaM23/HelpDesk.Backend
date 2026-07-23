@@ -25,7 +25,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
         ValidateIssuer = false,
-        ValidateAudience = false
+        ValidateAudience = false,
+        RoleClaimType = System.Security.Claims.ClaimTypes.Role
     };
 });
 
@@ -76,6 +77,8 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = string.Empty;
 });
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
