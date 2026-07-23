@@ -16,6 +16,5 @@ namespace OPI.HelpDessk.Domain.Entities
         public IEnumerable<Ticket> CreateTickets { get; set; } = new List<Ticket>();
         public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
 
-
     }
 }

@@ -25,7 +25,7 @@ namespace OPI.HelpDesk.Application.Services.Users
             User newUser = new User
             {
                 Id = newUserId,
-                FirstName = request.FristName,
+                FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
                 HashPassword = passwordHash,
@@ -79,7 +79,7 @@ namespace OPI.HelpDesk.Application.Services.Users
             if (userUpdated == null)
                 throw new Exception("Ek usuario a actualizar no se encuentra registrado.");
 
-            if (request.FristName is not null) userUpdated.FirstName = request.FristName;
+            if (request.FirstName is not null) userUpdated.FirstName = request.FirstName;
             if(request.LastName is not null) userUpdated.LastName = request.LastName;
             if(request.Email is not null) userUpdated.Email = request.Email;
             if(request.Password is not null)

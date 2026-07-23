@@ -51,7 +51,7 @@ namespace OPI.HelpDesk.Application.Services.Security
             User newUser = new User
             {
                 Id = newUserId,
-                FirstName = request.FristName,
+                FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
                 HashPassword = passwordHash,

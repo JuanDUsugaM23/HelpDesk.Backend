@@ -2,11 +2,11 @@
 {
     public enum TicketStatusEnum
     {
-        Abierto,
-        Asignado,
-        EnProceso,
-        Resuelto,
-        Cerrado,
-        Reabierto
+        Open,
+        Assigned,
+        InProgress,
+        Resolved,
+        Closed,
+        Reopened
     }
 }

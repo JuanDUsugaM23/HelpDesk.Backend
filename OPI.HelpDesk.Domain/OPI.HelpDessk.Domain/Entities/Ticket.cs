@@ -10,8 +10,8 @@ namespace OPI.HelpDessk.Domain.Entities
         public TicketPriorityEnum Priority { get; set; }
         public TicketStatusEnum Status { get; set; }
         public virtual User Client { get; set; }
-        public Guid AssignedTechnicalId { get; set; }
-        public virtual User AssignedTechnical { get; set; }
+        public Guid? AssignedTechnicalId { get; set; }
+        public virtual User? AssignedTechnical { get; set; }
         public DateTime SlaLimitTime { get; set; }
         public DateTime? ResolvedAt { get; set; }
         public DateTime? ClosedAt { get; set; }

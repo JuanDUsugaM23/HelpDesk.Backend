@@ -32,7 +32,8 @@ namespace OPI.HelpDesk.Infrastructure.Persistence.Configurations
             builder.HasOne(t => t.AssignedTechnical)
                 .WithMany(u => u.AssignedTickets)
                 .HasForeignKey(t => t.AssignedTechnicalId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
             builder.Property(t => t.SlaLimitTime)
                 .IsRequired()
                 .HasColumnType("timestamp with time zone")

@@ -4,6 +4,10 @@ using OPI.HelpDesk.Application.Interfaces.SettingSLAs;
 using OPI.HelpDesk.Application.Interfaces.Users;
 using OPI.HelpDesk.Application.Services.Security;
 using OPI.HelpDesk.Application.Services.SettingSLAs;
+using OPI.HelpDesk.Application.Interfaces.Ticket;
+using OPI.HelpDesk.Application.Interfaces.Users;
+using OPI.HelpDesk.Application.Services.Security;
+using OPI.HelpDesk.Application.Services.Tickets;
 using OPI.HelpDesk.Application.Services.Users;
 
 namespace OPI.HelpDesk.Application.DI
@@ -15,6 +19,8 @@ namespace OPI.HelpDesk.Application.DI
             service.AddTransient<ISecurityService, SecurityService>();
             service.AddTransient<IUserService, UserService>();
             service.AddTransient<ISettingSLA, SettingSLAService>();
+            service.AddTransient<ITicketService, TicketService>();
+
             return service;
         }
     }

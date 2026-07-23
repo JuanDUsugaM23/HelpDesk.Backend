@@ -22,7 +22,7 @@ namespace OPI.HelpDesk.Application.Specifications.Users
                 AddCriteria(u => u.Role == roleEnum);
             }
 
-            if(query.Specialities.Count != 0)
+            if(query.Specialities.Count != 0)            
             {
                 List<TicketCategoriesEnum> specialities = query.Specialities
                     .Select(s => (TicketCategoriesEnum)Enum.Parse(typeof(TicketCategoriesEnum), s, true))
@@ -35,6 +35,8 @@ namespace OPI.HelpDesk.Application.Specifications.Users
             else
                 ApplyOrderBy(b => b.Email);
             ApplyPaging((query.Page - 1) * query.PageSize, query.PageSize);
+       
+            
         }
     }
 }

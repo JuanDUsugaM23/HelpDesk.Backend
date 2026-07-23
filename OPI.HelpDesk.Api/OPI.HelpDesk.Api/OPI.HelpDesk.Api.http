@@ -1,6 +1,9 @@
-@OPI.HelpDesk.Api_HostAddress = http://localhost:5185
 
-GET {{OPI.HelpDesk.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{OPI.HelpDesk.Api_HostAddress}}/api/tickets
+Content-Type: application/json
+
+{
+  //CreateTicketRequest
+}
 
 ###
