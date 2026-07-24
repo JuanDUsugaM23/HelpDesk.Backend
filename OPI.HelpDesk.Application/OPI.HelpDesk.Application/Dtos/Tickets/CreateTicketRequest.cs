@@ -11,8 +11,8 @@ namespace OPI.HelpDesk.Application.DTOs.Ticket
     {
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public TicketCategoriesEnum Category { get; set; } 
-        public TicketPriorityEnum Priority { get; set; }
+        public string Category { get; set; } 
+        public string Priority { get; set; }
         public Guid ClientId { get; set; }
     }
 }

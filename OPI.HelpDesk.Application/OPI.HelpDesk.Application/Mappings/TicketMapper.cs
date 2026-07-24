@@ -12,11 +12,14 @@ namespace OPI.HelpDesk.Application.Mappings
                 Id = ticket.Id,
                 Title = ticket.Title,
                 Description = ticket.Description,
-                Category = ticket.Category,
-                Priority = ticket.Priority,
-                Status = ticket.Status,
+                Category = ticket.Category.ToString(),
+                Priority = ticket.Priority.ToString(),
+                Status = ticket.Status.ToString(),
                 ClientId = ticket.CreatedBy,
-                AssignedTechnicalId = ticket.AssignedTechnicalId,
+                ClientName = $"{ticket.Client.FirstName} {ticket.Client.LastName}",
+                AssignedTechnicianId = ticket.AssignedTechnical?.Id,
+                AssignedTechnicianName = ticket.AssignedTechnical == null
+                ? null: $"{ticket.AssignedTechnical.FirstName} {ticket.AssignedTechnical.LastName}",
                 CreatedAt = ticket.CreatedAt,
                 IsOverdue = ticket.IsOverdue
             };

@@ -1,4 +1,5 @@
-﻿using OPI.HelpDesk.Application.DTOs.Ticket;
+﻿using OPI.HelpDesk.Application.Dtos.Tickets;
+using OPI.HelpDesk.Application.DTOs.Ticket;
 using OPI.HelpDesk.Application.Interfaces.Ticket;
 using OPI.HelpDesk.Application.Interfaces.UnitOfWorks;
 using OPI.HelpDesk.Application.Mappings;
@@ -26,15 +27,26 @@ namespace OPI.HelpDesk.Application.Services.Tickets
             var client = await _unitOfWork.Repository<User>().GetAsync(clientSpecification);
             if (client is null || !client.Enable)
                 throw new InvalidOperationException("El cliente no existe o está desactivado.");
+            if (!Enum.TryParse<TicketCategoriesEnum>(request.Category, true, out var category))
+            {
+                throw new ArgumentException("La categoría enviada no existe.");
+            }
+
+            if (!Enum.TryParse<TicketPriorityEnum>(request.Priority, true, out var priority))
+            {
+                throw new ArgumentException("La prioridad enviada no existe.");
+            }
 
             var ticket = new Ticket
             {
                 Title = request.Title,
                 Description = request.Description,
-                Category = request.Category,
-                Priority = request.Priority,
+                Category = category,
+                Priority = priority,
 
                 Status = TicketStatusEnum.Open,
+
+                Client = client,
 
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = request.ClientId,
@@ -56,9 +68,9 @@ namespace OPI.HelpDesk.Application.Services.Tickets
 
         }
 
-        public async Task<IEnumerable<TicketResponse>> GetAllAsync()
+        public async Task<IEnumerable<TicketResponse>> GetAllAsync(GetAllTicketsQueryDto query)
         {
-            var specification = new GetAllTicketsSpecification();
+            var specification = new GetAllTicketsSpecification(query);
 
             var tickets = await _unitOfWork
                 .Repository<Ticket>()

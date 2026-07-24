@@ -12,11 +12,13 @@ namespace OPI.HelpDesk.Application.DTOs.Ticket
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public TicketCategoriesEnum Category { get; set; }
-        public TicketPriorityEnum Priority { get; set; }
-        public TicketStatusEnum Status { get; set; }
+        public string Category { get; set; }
+        public string Priority { get; set; }
+        public string Status { get; set; }
         public Guid ClientId { get; set; }
-        public Guid? AssignedTechnicalId { get; set; }
+        public string ClientName { get; set; }
+        public Guid? AssignedTechnicianId { get; set; }
+        public string? AssignedTechnicianName { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsOverdue { get; set; }
     }

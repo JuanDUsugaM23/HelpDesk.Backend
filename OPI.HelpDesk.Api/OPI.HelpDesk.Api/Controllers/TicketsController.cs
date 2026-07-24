@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OPI.HelpDesk.Application.Dtos.Tickets;
 using OPI.HelpDesk.Application.DTOs.Ticket;
 using OPI.HelpDesk.Application.Interfaces.Ticket;
 
@@ -35,9 +36,9 @@ namespace OPI.HelpDesk.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] GetAllTicketsQueryDto query)
         {
-            var result = await _ticketService.GetAllAsync();
+            var result = await _ticketService.GetAllAsync(query);
             return Ok(result);
         }
 
