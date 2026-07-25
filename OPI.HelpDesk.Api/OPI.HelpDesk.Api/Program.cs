@@ -61,6 +61,18 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddInfraestructureService(builder.Configuration);
 builder.Services.AddApplicationService();
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirFrontendReact", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") 
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -79,6 +91,8 @@ app.UseSwaggerUI(options =>
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseCors("PermitirFrontendReact");
 
 app.UseAuthorization();
 
