@@ -76,7 +76,7 @@ namespace OPI.HelpDesk.Api.Controllers
 
         [Authorize(Roles = "Supervisor")]
         [HttpPut("{id:guid}/assign")]
-        public async Task<IActionResult> Assign(Guid id, AssignTicketRequest request)
+        public async Task<IActionResult> Assign(Guid id, [FromBody] AssignTicketRequest request)
         {
             try
             {
