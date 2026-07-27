@@ -7,6 +7,7 @@
         InProgress,
         Resolved,
         Closed,
-        Reopened
+        Reopened,
+        Expired
     }
 }

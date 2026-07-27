@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace OPI.HelpDesk.Application.Specifications.Comments
 {
@@ -28,5 +29,7 @@ namespace OPI.HelpDesk.Application.Specifications.Comments
 
             ApplyPaging((query.Page - 1) * query.PageSize, query.PageSize);
         }
+
+        public void AddAccessCriteria(Expression<Func<Comment, bool>> criteria) => AddCriteria(criteria);
     }
 }

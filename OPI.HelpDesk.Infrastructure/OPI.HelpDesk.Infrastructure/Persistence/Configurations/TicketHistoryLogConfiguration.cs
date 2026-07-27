@@ -15,10 +15,8 @@ namespace OPI.HelpDesk.Infrastructure.Persistence.Configurations
                 .HasForeignKey(th => th.TicketId)
                 .OnDelete(DeleteBehavior.Cascade);
             builder.Property(th => th.FromStatus)
-                .HasConversion<int>()
                 .IsRequired();
             builder.Property(th => th.ToStatus)
-                .HasConversion<int>()
                 .IsRequired();
             builder.Property(th => th.Note)
                 .HasMaxLength(500);

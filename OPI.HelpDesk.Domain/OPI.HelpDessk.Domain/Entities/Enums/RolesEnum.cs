@@ -3,7 +3,7 @@
     public enum RolesEnum
     {
         Client,
-        Technican,
+        Technical,
         Supervisor
     }
 }

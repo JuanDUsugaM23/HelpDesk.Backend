@@ -8,7 +8,7 @@ namespace OPI.HelpDesk.Application.Specifications.Tickets
     {
         public GetTicketTechnicianSpecification(Guid id)
         {
-            AddCriteria(user => user.Id == id && user.Enable && user.Role == RolesEnum.Technican);
+            AddCriteria(user => user.Id == id && user.Enable && user.Role == RolesEnum.Technical);
         }
     }
 }

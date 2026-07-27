@@ -15,6 +15,7 @@ namespace OPI.HelpDesk.Application.Interfaces.Ticket
         Task<TicketResponse?> GetByIdAsync(Guid id);
         Task<TicketResponse?> UpdateAsync(Guid id,UpdateTicketRequest request);
         Task<TicketResponse?> AssignAsync(Guid id, AssignTicketRequest request);
+        Task<TicketResponse?> ChangeStatusAsync(Guid id, ChangeTicketStatusRequest request);
         Task<bool> DeleteAsync(Guid id);
     }
 }

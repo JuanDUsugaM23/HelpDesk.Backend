@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OPI.HelpDesk.Application.Dtos.Security;
 using OPI.HelpDesk.Application.Dtos.Shares;
 using OPI.HelpDesk.Application.Interfaces.Security;
@@ -53,6 +54,15 @@ namespace OPI.HelpDesk.Api.Controllers
                     ex.Message
                 );
             }
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            return Ok(new
+            {
+                message = "Sesión cerrada correctamente."
+            });
         }
     }
 }

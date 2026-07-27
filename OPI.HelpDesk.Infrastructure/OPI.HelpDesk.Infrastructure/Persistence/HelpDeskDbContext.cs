@@ -15,7 +15,7 @@ namespace OPI.HelpDesk.Infrastructure.Persistence
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            Guid userId = currentUserService.UserId ?? Guid.Empty;
+            Guid userId = currentUserService.UserId;
             DateTime now = DateTime.UtcNow;
 
             foreach (var entry in ChangeTracker.Entries<AuidEntity>())
