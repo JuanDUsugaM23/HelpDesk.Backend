@@ -7,10 +7,20 @@ namespace OPI.HelpDesk.Application.Specifications.Tickets
 {
     public class GetAllTicketsSpecification : BaseSpecification<Ticket>
     {
-        public GetAllTicketsSpecification(GetAllTicketsQueryDto query)
+        public GetAllTicketsSpecification(GetAllTicketsQueryDto query, User user)
         {
             AddInclude(t => t.Client);
             AddInclude(t => t.AssignedTechnical);
+
+            if (user.Role == RolesEnum.Client)
+            {
+                AddCriteria(t => t.Client.Id == user.Id);
+            }
+
+            if (user.Role == RolesEnum.Technical)
+            {
+                AddCriteria(t => t.AssignedTechnicalId == user.Id);
+            }
 
             if (!string.IsNullOrWhiteSpace(query.Search))
             {

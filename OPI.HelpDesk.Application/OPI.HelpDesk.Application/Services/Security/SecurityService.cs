@@ -60,7 +60,7 @@ namespace OPI.HelpDesk.Application.Services.Security
 
              await uow.Repository<User>().AddAsync(newUser, ct);
              await uow.SaveChangesAsync();
-            uow.Dispose();
+             uow.Dispose();
 
             var token = authService.GenerateJwtToken(newUser);
             //TODO:Falta refresh token

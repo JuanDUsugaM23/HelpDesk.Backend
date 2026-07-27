@@ -1,14 +1,16 @@
 ﻿using OPI.HelpDesk.Application.Dtos.Comments;
 using OPI.HelpDesk.Application.Dtos.Shares;
 using OPI.HelpDesk.Application.Interfaces.Comments;
+using OPI.HelpDesk.Application.Interfaces.Auditoires;
 using OPI.HelpDesk.Application.Interfaces.UnitOfWorks;
 using OPI.HelpDesk.Application.Specifications;
 using OPI.HelpDesk.Application.Specifications.Comments;
 using OPI.HelpDessk.Domain.Entities;
+using OPI.HelpDessk.Domain.Entities.Enums;
 
 namespace OPI.HelpDesk.Application.Services.Comments
 {
-    public class CommentService(IUnitOfWork uow) : ICommentService
+    public class CommentService(IUnitOfWork uow, ICurrentUserService currentUser) : ICommentService
     {
         public async Task<CommentResponseDto> AddCommnet(CommentAddRequestDto request, CancellationToken ct)
         {
@@ -20,6 +22,7 @@ namespace OPI.HelpDesk.Application.Services.Comments
             {
                 throw new Exception("Ticket no registardo en base de datos o esta inhabilitado.");
             }
+            EnsureCanAccessTicket(ticket);
 
             var newComment = new Comment()
             {
@@ -38,12 +41,13 @@ namespace OPI.HelpDesk.Application.Services.Comments
         public async Task<GetAllResponseDto<CommentResponseDto>> GetAllCommnets(GetAllCommentsQueryDto query, CancellationToken ct)
         {
             var spec = new CommentSpecificationFilter(query);
+            ApplyAccessFilter(spec);
             var comments = await uow.Repository<Comment>().GetAllAsync(spec, ct);
 
             return new GetAllResponseDto<CommentResponseDto>()
             {
                 Data = comments.Select(ToResponse),
-                Count = await uow.Repository<Comment>().CountAsync(),
+                Count = comments.Count(),
                 Page = query.Page,
                 PageSize = query.PageSize
             };
@@ -56,6 +60,11 @@ namespace OPI.HelpDesk.Application.Services.Comments
                 .Include(c => c.Ticket);
 
             var comment = await uow.Repository<Comment>().GetAsync(spec, ct);
+
+            if (comment is null)
+                throw new KeyNotFoundException("Comentario no encontrado.");
+
+            EnsureCanAccessTicket(comment.Ticket);
 
             return ToResponse(comment);
         }
@@ -70,6 +79,7 @@ namespace OPI.HelpDesk.Application.Services.Comments
             {
                 throw new Exception("Ticket no está registardo en base de datos o esta inhabilitado.");
             }
+            EnsureCanAccessTicket(ticket);
 
             var specComment = new SpecificationBuilder<Comment>()
                .Where(c => c.Id == request.Id);
@@ -78,6 +88,8 @@ namespace OPI.HelpDesk.Application.Services.Comments
             {
                 throw new Exception("El comentario no esta registardo en base de datos o esta inhabilitado.");
             }
+            if (currentUser.Role != RolesEnum.Supervisor.ToString() && commentUpdated.CreatedBy != currentUser.UserId)
+                throw new UnauthorizedAccessException("Solo el autor o un supervisor puede editar el comentario.");
             if (request.Text is not null) commentUpdated.Text = request.Text;
             if(request.TicketId is not null) commentUpdated.TicketId = request.TicketId.Value;
             if (request.Enable is not null) commentUpdated.Enable = request.Enable.Value; 
@@ -97,5 +109,35 @@ namespace OPI.HelpDesk.Application.Services.Comments
             Text = comment.Text,
             Enable = comment.Enable,
         };
+
+        private void ApplyAccessFilter(CommentSpecificationFilter spec)
+        {
+            if (currentUser.Role == RolesEnum.Supervisor.ToString())
+                return;
+
+            if (currentUser.Role == RolesEnum.Client.ToString())
+            {
+                spec.AddAccessCriteria(c => c.Ticket.CreatedBy == currentUser.UserId);
+                return;
+            }
+
+            if (currentUser.Role == RolesEnum.Technical.ToString())
+            {
+                spec.AddAccessCriteria(c => c.Ticket.AssignedTechnicalId == currentUser.UserId);
+                return;
+            }
+
+            throw new UnauthorizedAccessException("Rol no autorizado para consultar comentarios.");
+        }
+
+        private void EnsureCanAccessTicket(Ticket ticket)
+        {
+            if (currentUser.Role == RolesEnum.Supervisor.ToString() ||
+                (currentUser.Role == RolesEnum.Client.ToString() && ticket.CreatedBy == currentUser.UserId) ||
+                (currentUser.Role == RolesEnum.Technical.ToString() && ticket.AssignedTechnicalId == currentUser.UserId))
+                return;
+
+            throw new UnauthorizedAccessException("No tienes permiso para acceder a los comentarios de este ticket.");
+        }
     }
 }

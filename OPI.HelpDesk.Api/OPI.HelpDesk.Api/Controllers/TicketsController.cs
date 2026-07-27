@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OPI.HelpDesk.Application.Dtos.Tickets;
 using OPI.HelpDesk.Application.DTOs.Ticket;
 using OPI.HelpDesk.Application.Interfaces.Ticket;
 
 namespace OPI.HelpDesk.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TicketsController : ControllerBase
@@ -45,14 +47,22 @@ namespace OPI.HelpDesk.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var ticket = await _ticketService.GetByIdAsync(id);
+            try
+            {
+                var ticket = await _ticketService.GetByIdAsync(id);
 
-            if (ticket is null)
-                return NotFound();
+                if (ticket is null)
+                    return NotFound();
 
-            return Ok(ticket);
+                return Ok(ticket);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
         }
 
+        [Authorize(Roles ="Supervisor")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, UpdateTicketRequest request)
         {
@@ -64,6 +74,7 @@ namespace OPI.HelpDesk.Api.Controllers
             return Ok(ticket);
         }
 
+        [Authorize(Roles = "Supervisor")]
         [HttpPut("{id:guid}/assign")]
         public async Task<IActionResult> Assign(Guid id, AssignTicketRequest request)
         {
@@ -86,6 +97,25 @@ namespace OPI.HelpDesk.Api.Controllers
             }
         }
 
+        [HttpPut("{id:guid}/status")]
+        public async Task<IActionResult> ChangeStatus(Guid id, ChangeTicketStatusRequest request)
+        {
+            try
+            {
+                var ticket = await _ticketService.ChangeStatusAsync(id, request);
+                return ticket is null ? NotFound() : Ok(ticket);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Supervisor")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
